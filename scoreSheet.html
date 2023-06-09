@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        table{
+            width: 100%;
+        }
+        table,th,td{
+            border: 4px solid black;
+            border-collapse: collapse;
+        }
+        th,td{
+            width: 20%;
+            padding: 5px;
+            text-align: center;
+        }
+        button{
+            margin: 5px 0px 5px 0px;
+            font-size: 20px;
+            font-weight: bolder;
+            background-color: limegreen;
+            color: white;
+            border-radius: 10px;
+        }
+        #mark{
+            text-align: center;
+            background: none;
+            width: 100%;
+            border: none;
+        }
+        #mark, #remark, #grade, #name, label, th{
+            color: white;
+            font-size: 20px;
+            font-weight: bolder;
+        }
+        label{
+            text-shadow: 5px 7px 9px limegreen,-5px -7px 9px limegreen;
+        }
+        h3,h1{
+            text-align: center;
+            color: white;
+            text-shadow: 5px 7px 9px limegreen,-5px -7px 9px limegreen;
+        }
+        #name{
+            text-align: center;
+            background: none;
+            width: 100%;
+            border: none;
+        }
+        .body{
+            padding: 30px;
+            background-image: url(cloud9.jpeg);
+            background-repeat: none;
+            background-size: cover;
+            margin-left: 0%;
+            width: 80%;
+            text-align: center;
+        }
+        #num, #teacher, #subject{
+            font-size: 20px;
+            font-weight: bolder;
+            margin-bottom: 5px;
+        }
+        input{
+            width: 70%;
+            height: 30px;
+            font-weight: bolder;
+            font-size: 20px;
+        }
+        input:focus{
+            box-shadow: 7px 5px 9px pink, -7px -5px 9px pink;
+        }
+        #alarm{
+            font-size: 18px;
+            font-weight: bolder;
+            color: red;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="body">
+    <label for="">Generate table Columns</label><br>
+    <input id="num" type="number"><br>
+    <label for="">Subject</label><br>
+    <input id="subject" type="text"><br>
+    <label for="">Teacher's name</label><br>
+    <input id="teacher" type="text" onkeyup="show()"><br>
+    <div id="pass" style="display: none;">
+    <label for="">Enter your secret passphrase:</label><br>
+    <input type="password" id="password" onkeyup="checkpass()"><br>
+    <p id="alarm"></p>
+</div>
+    <button onclick="generate()">generate</button>
+    <h1 id="showsubject"></h1>
+    <table id="table">
+        <tr>
+            <th>name</th>
+            <th>mark</th>
+            <th>remark</th>
+            <th>grade</th>
+        </tr>
+    </table>
+    <!-- <button onclick="done()">DONE!</button> -->
+    <h3 id="showteacher"></h3>
+    <button onclick="window.print()">print result</button>
+    </div>
+    <script>
+        let alarm = document.getElementById("alarm");
+        let pass = document.getElementById("pass");
+        let password = document.getElementById("password");
+        let showteach = document.getElementById("showteacher");
+        let showsub = document.getElementById("showsubject");
+        let table = document.getElementById("table");
+        let num = document.getElementById("num");
+        let subject = document.getElementById("subject");
+        let teacher = document.getElementById("teacher");
+        function show(){
+            if(teacher.value.length > 3){
+            pass.style.display = "block";
+            }
+            else{
+                pass.style.display = "none";
+            }
+        }
+        function checkpass(){
+            if (password.value != "default"){
+                alarm.style.color = "red";
+                alarm.innerText = "wrong passphrase entered!!"
+            }
+            else{
+                alarm.style.color = "white"
+                alarm.style.textShadow = "5px 7px 9px limegreen,-5px -7px 9px limegreen"
+                alarm.innerText = "Good to go!!"
+            }
+        }
+        function generate(){
+            if(num.value > 0 && subject.value.length > 0 && teacher.value.length > 3 && password.value == "default"){
+            showteach.innerText = "COMPUTED BY " + teacher.value.toUpperCase()
+            showsub.innerText = subject.value.toUpperCase()
+            table.innerHTML = `<tr>
+            <th>name</th>
+            <th>mark</th>
+            <th>remark</th>
+            <th>grade</th>
+        </tr>`
+             for (let i = 0; i < num.value; i++){
+                table.innerHTML += `<tr>
+            <td><input type="text" id="name"></td>
+            <td><input type="number" id="mark" onkeyup="done()"></td>
+            <td id="remark"></td>
+            <td id="grade"></td>
+        </tr>`
+             }
+             let name = document.querySelectorAll("#name");
+             let mark = document.querySelectorAll("#mark");
+             let remark = document.querySelectorAll("#remark");
+             let grade = document.querySelectorAll("#grade");
+        }
+        else{
+            alert("fill in all inputs correctly")
+            showteach.innerText = "";
+            showsub.innerText = "";
+            table.innerHTML = `<tr>
+            <th>name</th>
+            <th>mark</th>
+            <th>remark</th>
+            <th>grade</th>
+        </tr>`
+        }
+    }
+        function done(){
+            for(let i = 0;i < mark.length; i++){
+                if(mark[i].value > 0){
+                    if(mark[i].value < 30){
+                        remark[i].style.color="red";
+                remark[i].innerHTML = "failed";
+                grade[i].innerHTML = "F9";
+            }
+            else if(mark[i].value < 40){
+                remark[i].style.color="red";
+                remark[i].innerHTML = "poor";
+                grade[i].innerHTML = "E8";
+            }
+            else if(mark[i].value < 50){
+                remark[i].style.color="blue";
+                remark[i].innerHTML = "good";
+                grade[i].innerHTML = "C3";
+            }
+            else if(mark[i].value < 60){
+                remark[i].style.color="blue";
+                remark[i].innerHTML = "good";
+                grade[i].innerHTML = "B3";
+            }
+            else if(mark[i].value < 80){
+                remark[i].style.color="limegreen";
+                remark[i].innerHTML = "very good";
+                grade[i].innerHTML = "B2";
+            }
+            else if(mark[i].value < 101){
+                remark[i].style.color="limegreen";
+                remark[i].innerHTML = "excellent";
+                grade[i].innerHTML = "A1";
+            }
+            else{
+                remark[i].innerHTML = "invalid input";
+                grade[i].innerHTML = "invalid input";
+            }
+        }
+                else{
+                    remark.innerHTML = "";
+                    grade.innerHTML = "";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
